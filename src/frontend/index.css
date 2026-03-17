@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#020617] text-white font-sans;
+  }
+}
+
+/* 🌈 Glassmorphism (UPGRADED) */
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl;
+}
+
+/* ✨ Glow effects */
+.glow {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+/* 🎯 Card hover animation */
+.card-hover {
+  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl;
+}
+
+/* 💫 Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🔥 Scrollbar hidden (for chat) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -48,10 +48,10 @@ import {
   Bar
 } from 'recharts';
 import { format, subDays, startOfDay, isSameDay, parseISO } from 'date-fns';
-import { auth, db, signIn, logOut } from './firebase';
-import { UserProfile, EmissionEntry, EmissionCategory } from './types';
-import { TRAVEL_FACTORS, ELECTRICITY_FACTOR, FOOD_FACTORS, BADGES } from './constants';
-import { getSustainabilityAdvice, chatWithAssistant, getWeatherData } from './services/geminiService';
+import { auth, db, signIn, logOut } from '../backend/firebase';
+import { UserProfile, EmissionEntry, EmissionCategory } from '../backend/types';
+import { TRAVEL_FACTORS, ELECTRICITY_FACTOR, FOOD_FACTORS, BADGES } from '../backend/constants';
+import { getSustainabilityAdvice, chatWithAssistant, getWeatherData } from '../backend/services/geminiService';
 import Markdown from 'react-markdown';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -275,7 +275,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen pb-24 md:pb-0 md:pl-20 lg:pl-64 bg-stone-50 dark:bg-black transition-colors duration-300">
+    <div className="min-h-screen pb-24 md:pb-0 md:pl-20 lg:pl-64 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#020617] text-white">
       {/* Sidebar / Bottom Nav */}
       <nav className="fixed bottom-0 left-0 right-0 md:top-0 md:bottom-0 md:w-20 lg:w-64 bg-white dark:bg-black border-t md:border-t-0 md:border-r border-stone-200 dark:border-stone-800 z-50 flex md:flex-col justify-around md:justify-start p-2 md:p-4 gap-4">
         <div className="hidden md:flex items-center gap-3 px-2 mb-8 mt-2">
