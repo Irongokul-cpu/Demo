@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and sustainability stats",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "totalPoints": { "type": "number" },
+        "currentStreak": { "type": "number" },
+        "lastActiveDate": { "type": "string", "format": "date" },
+        "badges": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "EmissionEntry": {
+      "title": "EmissionEntry",
+      "description": "A single record of carbon emission activity",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "category": { "type": "string", "enum": ["travel", "electricity", "food"] },
+        "value": { "type": "number" },
+        "unit": { "type": "string" },
+        "co2Amount": { "type": "number" },
+        "details": { "type": "object" },
+        "pointsEarned": { "type": "number" }
+      },
+      "required": ["userId", "date", "category", "co2Amount"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/users/{userId}/emissions/{emissionId}": {
+      "schema": "EmissionEntry",
+      "description": "User's emission tracking entries"
+    }
+  }
+}

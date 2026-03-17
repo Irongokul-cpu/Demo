@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required)
+    //   - displayName: string
+    //   - email: string (required)
+    //   - photoURL: string
+    //   - totalPoints: number
+    //   - currentStreak: number
+    //   - lastActiveDate: string (YYYY-MM-DD)
+    //   - badges: list
+    //
+    // Collection: users/{userId}/emissions
+    // Document ID: {emissionId}
+    // Fields:
+    //   - userId: string (required)
+    //   - date: timestamp (required)
+    //   - category: string (required, ['travel', 'electricity', 'food'])
+    //   - value: number
+    //   - unit: string
+    //   - co2Amount: number (required)
+    //   - details: map
+    //   - pointsEarned: number
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid is string &&
+             data.email is string &&
+             (!('totalPoints' in data) || data.totalPoints is number) &&
+             (!('currentStreak' in data) || data.currentStreak is number) &&
+             (!('badges' in data) || data.badges is list);
+    }
+
+    function isValidEmission(data) {
+      return data.keys().hasAll(['userId', 'date', 'category', 'co2Amount']) &&
+             data.userId == request.auth.uid &&
+             data.date is timestamp &&
+             data.category in ['travel', 'electricity', 'food'] &&
+             data.co2Amount is number &&
+             (!('value' in data) || data.value is number) &&
+             (!('pointsEarned' in data) || data.pointsEarned is number);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+      
+      match /emissions/{emissionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidEmission(request.resource.data);
+        allow update: if isOwner(userId) && isValidEmission(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
